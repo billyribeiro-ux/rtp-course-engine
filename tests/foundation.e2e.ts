@@ -22,18 +22,37 @@ test('the cascade layers exist in the agreed order', async ({ page }) => {
 	expect(order).toEqual(['reset', 'tokens', 'base', 'layout', 'components', 'utilities']);
 });
 
-test('light scheme: the page uses the paper and ink tokens', async ({ page }) => {
-	await page.emulateMedia({ colorScheme: 'light' });
-	await page.goto('/');
-	const body = page.locator('body');
-	await expect(body).toHaveCSS('background-color', 'oklch(0.995 0.004 95)');
-	await expect(body).toHaveCSS('color', 'oklch(0.155 0.012 265)');
-});
+for (const colorScheme of ['light', 'dark'] as const) {
+	test(`${colorScheme} system setting: the page stays on the approved navy and text tokens`, async ({
+		page
+	}) => {
+		await page.emulateMedia({ colorScheme });
+		await page.goto('/');
+		const body = page.locator('body');
+		await expect(body).toHaveCSS('background-color', 'oklch(0.1898 0.0458 261.92)');
+		await expect(body).toHaveCSS('color', 'oklch(0.9594 0.0108 256.7)');
+	});
+}
 
-test('dark scheme: the page switches to the dark tokens', async ({ page }) => {
-	await page.emulateMedia({ colorScheme: 'dark' });
+test('headings use Poppins and paragraphs use Montserrat, both from our own server', async ({
+	page,
+	baseURL
+}) => {
+	const fontRequests: string[] = [];
+	page.on('requestfinished', (request) => {
+		if (request.resourceType() === 'font') fontRequests.push(request.url());
+	});
 	await page.goto('/');
-	const body = page.locator('body');
-	await expect(body).toHaveCSS('background-color', 'oklch(0.155 0.012 265)');
-	await expect(body).toHaveCSS('color', 'oklch(0.93 0.006 265)');
+	await expect(page.locator('body')).toHaveCSS('font-family', /^"Montserrat Variable"/);
+	await expect(page.locator('h1')).toHaveCSS('font-family', /^Poppins/);
+	const loadedFamilies = await page.evaluate(async () => {
+		await document.fonts.ready;
+		return [...document.fonts]
+			.filter((face) => face.status === 'loaded')
+			.map((face) => face.family.replaceAll('"', ''));
+	});
+	expect(loadedFamilies).toContain('Poppins');
+	expect(loadedFamilies).toContain('Montserrat Variable');
+	expect(fontRequests.length).toBeGreaterThan(0);
+	for (const url of fontRequests) expect(new URL(url).origin).toBe(new URL(baseURL ?? '').origin);
 });
