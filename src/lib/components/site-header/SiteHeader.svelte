@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { afterNavigate } from '$app/navigation';
+	import { onNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import type { RouteId } from '$app/types';
@@ -77,12 +77,30 @@
 		if (event.target === event.currentTarget) sheetOpen = false;
 	}
 
-	afterNavigate(() => {
+	/**
+	 * From --nav-full up the stylesheet hides the panel. If the window grows past that point while
+	 * the panel is open (a tablet turned to landscape), close it: a hidden modal would leave the whole
+	 * page inert. Asking the element whether it is visible keeps the breakpoint in CSS alone.
+	 */
+	function onWindowResize(): void {
+		const sheet = document.getElementById(sheetId);
+		if (sheetOpen && sheet instanceof HTMLDialogElement && !sheet.checkVisibility()) {
+			sheetOpen = false;
+		}
+	}
+
+	/*
+	 * Close menus as navigation starts, not after it ends: closing the dialog returns focus to the
+	 * Menu button, and doing it first lets SvelteKit then move focus to <body> as it does after every
+	 * navigation (svelte.dev/docs/kit/accessibility).
+	 */
+	onNavigate(() => {
 		openMenu = null;
 		sheetOpen = false;
 	});
 </script>
 
+<svelte:window onresize={onWindowResize} />
 <svelte:document onkeydown={onDocumentKeydown} />
 
 <header class="site-header">

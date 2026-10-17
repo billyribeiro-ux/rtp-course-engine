@@ -205,6 +205,28 @@ test.describe('phone and tablet menu', () => {
 		const overflow = await page.evaluate(() => getComputedStyle(document.documentElement).overflow);
 		expect(overflow).toBe('hidden');
 	});
+
+	test('turning a tablet to landscape closes the open menu and frees the page', async ({
+		page
+	}) => {
+		await page.setViewportSize({ width: 820, height: 1180 });
+		await menuButton(page).click();
+		await expect(sheet(page)).toBeVisible();
+		await page.setViewportSize({ width: 1180, height: 820 });
+		// The wide layout hides the panel; a modal left open behind it would make the page inert.
+		await expect(page.locator('.sheet')).not.toHaveAttribute('open');
+		await page.getByRole('button', { name: 'Store' }).click();
+		await expect(page.getByRole('link', { name: 'Courses' })).toBeVisible();
+	});
+
+	test('after a menu link, focus starts at the top of the new page', async ({ page }) => {
+		await menuButton(page).click();
+		await sheet(page).getByRole('link', { name: 'Mentorship' }).click();
+		await expect(page).toHaveURL('/mentorship');
+		await expect(sheet(page)).toBeHidden();
+		// SvelteKit focuses <body> after every navigation (svelte.dev/docs/kit/accessibility).
+		await expect(page.locator('body')).toBeFocused();
+	});
 });
 
 test.describe('accessibility', () => {
