@@ -3,13 +3,10 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import type { RouteId } from '$app/types';
-	import CaretDownIcon from 'phosphor-svelte/lib/CaretDownIcon';
-	import ListIcon from 'phosphor-svelte/lib/ListIcon';
-	import UserIcon from 'phosphor-svelte/lib/UserIcon';
-	import XIcon from 'phosphor-svelte/lib/XIcon';
 	import type { Attachment } from 'svelte/attachments';
 	import { on } from 'svelte/events';
 	import Logo from '#lib/components/brand/Logo.svelte';
+	import Icon from '#lib/components/icons/Icon.svelte';
 	import {
 		CALL_TO_ACTION,
 		COMPANY_NAV,
@@ -112,7 +109,7 @@
 				href={resolve(LOGIN_LINK.route)}
 				aria-current={isCurrent(LOGIN_LINK.route) ? 'page' : undefined}
 			>
-				<span class="icon" aria-hidden="true"><UserIcon weight="bold" /></span>
+				<span class="icon" aria-hidden="true"><Icon name="user" /></span>
 				{LOGIN_LINK.label}
 			</a>
 		</div>
@@ -138,7 +135,7 @@
 								onclick={() => toggleMenu(item.id)}
 							>
 								{item.label}
-								<span class="caret" aria-hidden="true"><CaretDownIcon weight="bold" /></span>
+								<span class="caret" aria-hidden="true"><Icon name="caret-down" /></span>
 							</button>
 							<div id={panelId(item.id)} class="dropdown" hidden={openMenu !== item.id}>
 								<ul class="dropdown-list" role="list">
@@ -177,7 +174,7 @@
 			aria-controls={sheetId}
 			onclick={() => (sheetOpen = true)}
 		>
-			<span class="icon" aria-hidden="true"><ListIcon weight="bold" /></span>
+			<span class="icon" aria-hidden="true"><Icon name="list" /></span>
 			Menu
 		</button>
 	</div>
@@ -196,7 +193,7 @@
 				<!-- A form with method="dialog" closes its dialog natively, no script needed. -->
 				<form method="dialog">
 					<button class="close-sheet" type="submit">
-						<span class="icon" aria-hidden="true"><XIcon weight="bold" /></span>
+						<span class="icon" aria-hidden="true"><Icon name="x" /></span>
 						Close
 					</button>
 				</form>
@@ -208,7 +205,7 @@
 						<details class="sheet-section" name="{uid}-sections">
 							<summary class="sheet-summary">
 								{item.label}
-								<span class="caret" aria-hidden="true"><CaretDownIcon weight="bold" /></span>
+								<span class="caret" aria-hidden="true"><Icon name="caret-down" /></span>
 							</summary>
 							<ul class="sheet-list" role="list">
 								{#each item.links as entry (entry.route)}
