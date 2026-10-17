@@ -51,7 +51,8 @@
 				stroke-linecap="round"
 				stroke-linejoin="round"
 			/>
-			{#each MARK.nodes as node, index (index)}
+			<!-- Keyed by position: each ring sits at its own point on the chart line. -->
+			{#each MARK.nodes as node (`${node.cx},${node.cy}`)}
 				<circle cx={node.cx} cy={node.cy} r={MARK.ringRadius} fill="#000" />
 			{/each}
 		</mask>
@@ -63,7 +64,7 @@
 		fill="url(#{uid}-disc)"
 		mask="url(#{uid}-cutout)"
 	/>
-	{#each MARK.nodes as node, index (index)}
+	{#each MARK.nodes as node (`${node.cx},${node.cy}`)}
 		<circle cx={node.cx} cy={node.cy} r={MARK.dotRadius} fill="url(#{uid}-dot)" />
 	{/each}
 	{#if art.lettering}
