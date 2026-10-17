@@ -1,0 +1,30 @@
+/* Element defaults built from tokens. */
+
+html {
+	-webkit-font-smoothing: antialiased;
+}
+
+body {
+	font-family: var(--font-sans);
+	font-size: var(--step-0);
+	line-height: var(--line-height-body);
+	color: var(--color-text);
+	background-color: var(--color-page);
+}
+
+h1,
+h2,
+h3 {
+	line-height: var(--line-height-tight);
+	text-wrap: balance;
+}
+
+a {
+	color: inherit;
+	text-underline-offset: 0.2em;
+}
+
+:focus-visible {
+	outline: var(--focus-ring-width) solid var(--color-focus-ring);
+	outline-offset: var(--focus-ring-offset);
+}

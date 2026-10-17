@@ -1,0 +1,55 @@
+/* A small modern reset: remove browser quirks, keep accessible defaults. */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+* {
+	margin: 0;
+}
+
+html {
+	text-size-adjust: none;
+}
+
+body {
+	min-block-size: 100dvh;
+}
+
+/* Lists marked role="list" are navigation-style lists: no bullets, no indent.
+   The role keeps list semantics in Safari/VoiceOver, which drops them when
+   list-style is none. Plain <ul>/<ol> in content keep their bullets. */
+ul[role='list'],
+ol[role='list'] {
+	padding: 0;
+	list-style: none;
+}
+
+img,
+picture,
+svg,
+video,
+canvas {
+	display: block;
+	max-inline-size: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+	font: inherit;
+	color: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	overflow-wrap: break-word;
+}

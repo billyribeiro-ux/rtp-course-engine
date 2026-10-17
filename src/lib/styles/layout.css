@@ -1,0 +1,17 @@
+/* Layout primitives: small, reusable patterns that adapt to their content. */
+
+/* Center: a content column with fluid side gutters. */
+.wrapper {
+	inline-size: 100%;
+	max-inline-size: var(--content-max);
+	margin-inline: auto;
+	padding-inline: var(--space-gutter);
+}
+
+/* Cluster: items in a row that wrap when space runs out. */
+.cluster {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cluster-gap, var(--space-s));
+	align-items: center;
+}

@@ -1,0 +1,11 @@
+/*
+ * The cascade order, declared once. A later layer always wins over an earlier
+ * one, whatever the selectors' specificity, so `!important` is never needed.
+ */
+@layer reset, tokens, base, layout, components, utilities;
+
+@import url('./reset.css') layer(reset);
+@import url('./tokens.css') layer(tokens);
+@import url('./base.css') layer(base);
+@import url('./layout.css') layer(layout);
+@import url('./utilities.css') layer(utilities);

@@ -1,0 +1,16 @@
+/*
+ * Breakpoints: the single source of truth.
+ * Locked in the Engineering Standards doc (Layout and responsiveness).
+ * Mobile-first: every query is a minimum width, in rem, so it follows the
+ * reader's browser font-size setting. No other file may contain a width query.
+ *
+ * Browsers cannot read @custom-media yet, so PostCSS (postcss-custom-media)
+ * compiles `@media (--md)` into `@media (width >= 48rem)` at build time.
+ */
+@custom-media --sm (width >= 30rem); /* 480px */
+@custom-media --md (width >= 48rem); /* 768px */
+@custom-media --lg (width >= 64rem); /* 1024px */
+@custom-media --xl (width >= 80rem); /* 1280px */
+@custom-media --2xl (width >= 90rem); /* 1440px */
+@custom-media --nav-full (width >= 64rem); /* full horizontal navigation */
+@custom-media --motion-ok (prefers-reduced-motion: no-preference);
