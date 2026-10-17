@@ -30,6 +30,11 @@ h3 {
 	font-weight: var(--font-weight-semibold);
 }
 
+/* While the phone and tablet menu (a modal dialog) is open, the page behind it does not scroll. */
+html:has(dialog[open]) {
+	overflow: hidden;
+}
+
 a {
 	color: inherit;
 	text-underline-offset: 0.2em;

@@ -101,6 +101,11 @@
 	--radius-pill: 999rem;
 	--shadow-panel: 0 1rem 2.5rem oklch(0% 0 0deg / 45%);
 
+	/* ---------- Layers (stacking order) ---------- */
+
+	--layer-header: 100;
+	--layer-dropdown: 110;
+
 	/* ---------- Motion ---------- */
 
 	--duration-fast: 150ms;
@@ -120,6 +125,7 @@
 	--color-field: var(--navy-850);
 	--color-field-border: var(--navy-600);
 	--color-line: var(--navy-700);
+	--color-backdrop: oklch(8% 0.02 262deg / 62%);
 	--color-text: var(--mist-100);
 	--color-text-muted: var(--slate-300);
 
