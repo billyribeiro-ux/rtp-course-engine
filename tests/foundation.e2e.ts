@@ -56,3 +56,23 @@ test('headings use Poppins and paragraphs use Montserrat, both from our own serv
 	expect(fontRequests.length).toBeGreaterThan(0);
 	for (const url of fontRequests) expect(new URL(url).origin).toBe(new URL(baseURL ?? '').origin);
 });
+
+test('the two fonts every page needs are preloaded, and each is fetched once', async ({ page }) => {
+	await page.goto('/');
+	const preloaded = await page
+		.locator('link[rel="preload"][as="font"]')
+		.evaluateAll((links) => links.map((link) => (link as HTMLLinkElement).href).sort());
+	expect(preloaded).toHaveLength(2);
+	expect(preloaded[0]).toMatch(/\/montserrat-latin-wght-normal\.[^/]+\.woff2$/);
+	expect(preloaded[1]).toMatch(/\/poppins-latin-700-normal\.[^/]+\.woff2$/);
+	// A preload the stylesheet cannot reuse (a CORS mismatch, say) shows up as a second fetch.
+	const fetched = await page.evaluate(async () => {
+		await document.fonts.ready;
+		return performance
+			.getEntriesByType('resource')
+			.map((entry) => entry.name)
+			.filter((name) => name.endsWith('.woff2'))
+			.sort();
+	});
+	expect(fetched).toEqual(preloaded);
+});
